@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<Windows.h>
 #include<iostream>
 #include"resource.h"
@@ -44,7 +45,9 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			INT i = SendMessage(hCombo, CB_GETCURSEL, 0, 0);	//Получаем номер выбранного элемента
 			SendMessage(hCombo, CB_GETLBTEXT, i, (LPARAM)sz_buffer);	//Считываем содержимое выбранной строки в буфер
 
-			MessageBox(hwnd, sz_buffer, "Info", MB_OK | MB_ICONINFORMATION);
+			CHAR sz_message[SIZE] = {};
+			sprintf(sz_message, "Вы выбрали пункт №%i, со значением \"%s\".", i, sz_buffer);
+			MessageBox(hwnd, sz_message, "Info", MB_OK | MB_ICONINFORMATION);
 		}
 		break;
 		case IDCANCEL:EndDialog(hwnd, 0);
