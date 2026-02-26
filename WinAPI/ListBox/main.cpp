@@ -6,6 +6,7 @@
 CONST CHAR* VALUES[] = { "This", "is", "my", "first", "List", "Box" };
 
 BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+BOOL CALLBACK DlgProcAdd(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
@@ -29,6 +30,9 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
+		case IDC_BUTTON_ADD:
+			DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, DlgProcAdd, 0);
+			break;
 		case IDOK:
 		{
 			CONST INT SIZE = 256;
@@ -39,10 +43,43 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SendMessage(hListBox, LB_GETTEXT, i, (LPARAM)sz_buffer);
 			CHAR sz_message[SIZE] = {};
 			sprintf(sz_message, "Вы выбрали пункт №%i со значением \"%s\".", i, sz_buffer);
-			if(i != LB_ERR)MessageBox(hwnd, sz_message, "Info", MB_OK | MB_ICONINFORMATION);
+			if (i != LB_ERR)MessageBox(hwnd, sz_message, "Info", MB_OK | MB_ICONINFORMATION);
 			else MessageBox(hwnd, "Для начала выберите элемент", "Info", MB_OK | MB_ICONINFORMATION);
 		}
 		break;
+		case IDCANCEL:EndDialog(hwnd, 0);
+		}
+		break;
+	case WM_CLOSE:
+		EndDialog(hwnd, 0);
+	}
+	return FALSE;
+}
+BOOL CALLBACK DlgProcAdd(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg)
+	{
+	case WM_INITDIALOG:
+		SetFocus(GetDlgItem(hwnd, IDC_EDIT_ADD));
+		break;
+	case WM_COMMAND:
+		switch (LOWORD(wParam))
+		{
+		case IDOK:
+		{
+			CONST INT SIZE = 256;
+			CHAR sz_buffer[SIZE] = {};
+			HWND hEditAdd = GetDlgItem(hwnd, IDC_EDIT_ADD);
+			SendMessage(hEditAdd, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
+
+			if (strlen(sz_buffer) > 0)
+			{
+				HWND hParent = GetParent(hwnd);	//Получаем родительское окно
+				HWND hListBox = GetDlgItem(hParent, IDC_LIST);	//Получаем ListBox родителького окна
+				if (SendMessage(hListBox, LB_FINDSTRING, 0, (LPARAM)sz_buffer) == LB_ERR)
+					SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)sz_buffer);
+			}
+		}
 		case IDCANCEL:EndDialog(hwnd, 0);
 		}
 		break;
