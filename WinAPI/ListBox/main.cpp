@@ -38,6 +38,13 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDC_BUTTON_ADD:
 			DialogBoxParam(GetModuleHandle(NULL), MAKEINTRESOURCE(IDD_DIALOG_ADD), hwnd, DlgProcAdd, 0);
 			break;
+		case IDC_BUTTON_DELETE:
+		{
+			HWND hListBox = GetDlgItem(hwnd, IDC_LIST);
+			INT i = SendMessage(hListBox, LB_GETCURSEL, 0, 0);
+			SendMessage(hListBox, LB_DELETESTRING, i, 0);
+		}
+		break;
 		case IDOK:
 		{
 			CONST INT SIZE = 256;
@@ -112,14 +119,14 @@ BOOL CALLBACK DlgProcEdit(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		SendMessage(hEdit, EM_SETSEL, 0, -1);
 		SendMessage(hEdit, EM_SETSEL, -1, -1);
 	}
-		break;
+	break;
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
 		case IDOK:
 		{
 			SendMessage(hEdit, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
-			if (strlen(sz_buffer) > 0 && SendMessage(hListBox, LB_FINDSTRING,0,(LPARAM)sz_buffer) == LB_ERR)
+			if (strlen(sz_buffer) > 0 && SendMessage(hListBox, LB_FINDSTRING, 0, (LPARAM)sz_buffer) == LB_ERR)
 			{
 				INT i = SendMessage(hListBox, LB_GETCURSEL, 0, 0);
 				SendMessage(hListBox, LB_DELETESTRING, i, 0);
