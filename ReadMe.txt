@@ -2,7 +2,7 @@
 https://www.youtube.com/playlist?list=PLeqyOOqxeiIPBr4kgtD7_0ERBJCan2dWZ
 
 TODO:
-1. Добавить знаек программы в Область уведомлений (System tray);
+1. Добавить значек программы в Область уведомлений (System tray);
 2. При двойном щелчке по значку в области уведомлений часы должны выходить на передний план;
 
 DONE:
