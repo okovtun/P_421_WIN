@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
+using Microsoft.Win32;
+
 namespace Clock
 {
 	public partial class MainForm : Form
@@ -110,6 +112,15 @@ namespace Clock
 		{
 			if (fontDialog.ShowDialog() == DialogResult.OK)
 				labelTime.Font = fontDialog.Font;
+		}
+
+		private void tsmiAutostart_CheckedChanged(object sender, EventArgs e)
+		{
+			string key_name = "Clock_P_421";
+			RegistryKey rk = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+			if (tsmiAutostart.Checked) rk.SetValue(key_name, Application.ExecutablePath);
+			else rk.DeleteValue(key_name, false);
+			rk.Dispose();
 		}
 	}
 }
