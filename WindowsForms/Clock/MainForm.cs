@@ -97,11 +97,19 @@ namespace Clock
 		{
 			if (foregroundColorDialog.ShowDialog() == DialogResult.OK)
 				labelTime.ForeColor = foregroundColorDialog.Color;
+			//Get/Set-методами
+			//Get (взять, получить)		- открывают доступ к закрытым переменым в классе на чтение (позволяют получить значение закрытой переменной).
+			//Set (задать, установить)	- открывают доступ к закрытым переменным в классе на запись (позволяют задать значние закрытой переменной).
+			//		Кроме того, Set-методы обеспечивают фильтрацию данных, т.е., предотвращают попадание некорректных значений в закрытые переменные.
+			//В языке C#, Инкапсуляция так же реализуется при помощи Свойств (Properties).
+			//Свойства (Properties) - это синтаксическая конструкция, которая объединяет в себе Get и Set метод, и позволяет их использовать,
+			//						  как самую обычную открытую переменную.
 		}
 
 		private void tsmiFont_Click(object sender, EventArgs e)
 		{
-			fontDialog.ShowDialog();
+			if (fontDialog.ShowDialog() == DialogResult.OK)
+				labelTime.Font = fontDialog.Font;
 		}
 	}
 }
